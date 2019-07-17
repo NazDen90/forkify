@@ -1,3 +1,24 @@
-import num from './test'
-const x = 23;
-console.log(`I imported ${num} from another model called test.js! Variable x is ${x}.`);
+import Search from './models/Search';
+import * as searchView from './views/searchView';
+import {elements, renderLoader, clearLoader} from "./views/base";
+
+const state = {};
+
+const controlSearch = async () => {
+    const query = searchView.getInput();
+    if (query) {
+        state.search = new Search(query);
+        searchView.clearInput();
+        searchView.clearResults();
+        renderLoader(elements.searchResult);
+        await state.search.getResults();
+        clearLoader();
+        console.log(state.search.result);
+        searchView.renderResults(state.search.result);
+    }
+};
+
+elements.searchForm.addEventListener('submit', e => {
+    e.preventDefault();
+    controlSearch();
+});
