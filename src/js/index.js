@@ -13,7 +13,6 @@ const controlSearch = async () => {
         renderLoader(elements.searchResult);
         await state.search.getResults();
         clearLoader();
-        console.log(state.search.result);
         searchView.renderResults(state.search.result);
     }
 };
@@ -21,4 +20,13 @@ const controlSearch = async () => {
 elements.searchForm.addEventListener('submit', e => {
     e.preventDefault();
     controlSearch();
+});
+
+elements.searchResPage.addEventListener('click', e => {
+    let btn = e.target.closest('.btn-inline');
+    if (btn) {
+        const goToPage = parseInt(btn.dataset.goto, 10);
+        searchView.clearResults();
+        searchView.renderResults(state.search.result, goToPage);
+    }
 });
